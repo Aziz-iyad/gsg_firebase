@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gsg_fire_base/Auth/Screens/GetStarted/GetStartedScreen.dart';
 import 'package:gsg_fire_base/HomeScreen.dart';
 import 'package:gsg_fire_base/Services/Router.dart';
 import 'package:gsg_fire_base/Services/custom_dialoug.dart';
@@ -9,12 +10,12 @@ class AuthHelper {
   static AuthHelper authHelper = AuthHelper._();
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
-  signUp(String email, String password) async {
+  Future<UserCredential> signUp(String email, String password) async {
     try {
       UserCredential userCredential = await firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
-      await verifyEmail();
-      logout();
+      await RouteHelper.routeHelper.goTOReplacement(GetStartedScreen.routeName);
+      return userCredential;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         CustomDialog.customDialog
@@ -28,10 +29,12 @@ class AuthHelper {
     }
   }
 
-  signIn(String email, String password) async {
+  Future<UserCredential> signIn(String email, String password) async {
     try {
       UserCredential userCredential = await firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
+      await RouteHelper.routeHelper.goTOReplacement(HomeScreen.routeName);
+      return userCredential;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         CustomDialog.customDialog
@@ -40,14 +43,6 @@ class AuthHelper {
         CustomDialog.customDialog
             .showCustomDialog('Wrong password provided for that user.');
       }
-    }
-    bool isVerifiedEmail = AuthHelper.authHelper.checkEmailVerification();
-    if (isVerifiedEmail) {
-      RouteHelper.routeHelper.goTOReplacement(HomeScreen.routeName);
-    } else {
-      CustomDialog.customDialog.showCustomDialog(
-          'You have to verify your email, press ok to send a Verification email',
-          myVerification());
     }
   }
 

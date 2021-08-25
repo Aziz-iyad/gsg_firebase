@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:gsg_fire_base/Auth/Providers/authProvider.dart';
+import 'package:gsg_fire_base/Auth/Screens/GetStarted/GetStartedScreen.dart';
 
 import 'Auth/Screens/Login/login_screen.dart';
 import 'Auth/Screens/ResetPassword/ResetPassword.dart';
@@ -20,6 +21,7 @@ void main() {
             SignUpScreen.routeName: (context) => SignUpScreen(),
             ResetPasswordScreen.routeName: (context) => ResetPasswordScreen(),
             HomeScreen.routeName: (context) => HomeScreen(),
+            GetStartedScreen.routeName: (context) => GetStartedScreen(),
           },
           navigatorKey: RouteHelper.routeHelper.navKey,
           debugShowCheckedModeBanner: false,

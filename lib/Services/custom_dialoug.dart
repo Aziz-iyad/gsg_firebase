@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gsg_fire_base/Auth/Screens/Login/login_screen.dart';
 import 'package:gsg_fire_base/Services/Router.dart';
 
 class CustomDialog {
@@ -17,7 +18,8 @@ class CustomDialog {
                       RouteHelper.routeHelper.back();
                     } else {
                       function();
-                      RouteHelper.routeHelper.back();
+                      RouteHelper.routeHelper
+                          .goTOReplacement(LoginScreen.routeName);
                     }
                   },
                   child: Text('ok'))
