@@ -8,6 +8,7 @@ import 'package:gsg_fire_base/Helpers/firesStore_helper.dart';
 import 'package:gsg_fire_base/Helpers/firestorage_helper.dart';
 import 'package:gsg_fire_base/HomeScreen.dart';
 import 'package:gsg_fire_base/Models/register_request.dart';
+import 'package:gsg_fire_base/Models/user_model.dart';
 import 'package:gsg_fire_base/Services/Router.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -91,5 +92,13 @@ class AuthProvider extends ChangeNotifier {
   sendVerification() async {
     await AuthHelper.authHelper.verifyEmail();
     await AuthHelper.authHelper.logout();
+  }
+
+  UserModel userModel;
+  getUserFromFireStore() async {
+    String userId = AuthHelper.authHelper.getUserId();
+    userModel =
+        await FirestoreHelper.firestoreHelper.getUserFromFirestore(userId);
+    notifyListeners();
   }
 }
