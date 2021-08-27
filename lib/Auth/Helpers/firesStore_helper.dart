@@ -33,4 +33,11 @@ class FirestoreHelper {
     print(users.length);
     return users;
   }
+
+  updateProfile(UserModel userModel) async {
+    await firebaseFirestore
+        .collection('Users')
+        .doc(userModel.id)
+        .update(userModel.toMap());
+  }
 }

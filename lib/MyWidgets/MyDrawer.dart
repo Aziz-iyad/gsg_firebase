@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:gsg_fire_base/AppScreens/ProfileScreen/ProfileScreen.dart';
 import 'package:gsg_fire_base/Auth/Screens/Welcome/welcome_screen.dart';
-import 'package:gsg_fire_base/Helpers/auth_helper.dart';
+import 'package:gsg_fire_base/Providers/authProvider.dart';
+import 'package:provider/provider.dart';
+import '../Auth/Helpers/auth_helper.dart';
 import 'package:gsg_fire_base/Services/Router.dart';
 import 'package:gsg_fire_base/constants.dart';
-import 'package:gsg_fire_base/profileScreen/ProfileScreen.dart';
 
 class MyDrawer extends StatelessWidget {
+  String imgUrl;
+  String userName;
+  MyDrawer({this.userName, this.imgUrl});
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -20,15 +25,23 @@ class MyDrawer extends StatelessWidget {
                 padding: EdgeInsets.only(top: 20),
                 child: Column(
                   children: [
-                    Image.asset(
-                      "assets/images/avatar.png",
-                      height: 80,
-                      width: 80,
-                      fit: BoxFit.fill,
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundImage: imgUrl == null
+                          ? AssetImage(
+                              "assets/images/defaultProfile.png",
+                            )
+                          : NetworkImage(
+                              imgUrl,
+                            ),
+                    ),
+                    SizedBox(
+                      height: 10,
                     ),
                     Text(
-                      AuthHelper.authHelper.getCurrentUser().email,
+                      userName,
                       style: TextStyle(
+                        fontSize: 20,
                         color: Colors.white,
                       ),
                     ),
@@ -43,13 +56,12 @@ class MyDrawer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 GestureDetector(
-                  onTap: () async {
-                    await AuthHelper.authHelper.logout();
+                  onTap: () {
                     RouteHelper.routeHelper
-                        .goTOReplacement(WelcomeScreen.routeName);
+                        .goTOReplacement(ProfileScreen.routeName);
                   },
                   child: Text(
-                    'Log Out',
+                    'My Profile',
                     style: TextStyle(
                       color: kPrimaryColor,
                       fontSize: 17,
@@ -66,12 +78,17 @@ class MyDrawer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 GestureDetector(
-                  onTap: () {
+                  onTap: () async {
+                    await AuthHelper.authHelper.logout();
+                    Provider.of<AuthProvider>(context, listen: false)
+                        .resetController();
+                    Provider.of<AuthProvider>(context, listen: false).file =
+                        null;
                     RouteHelper.routeHelper
-                        .goTOReplacement(ProfileScreen.routeName);
+                        .goTOReplacement(WelcomeScreen.routeName);
                   },
                   child: Text(
-                    'My Profile',
+                    'Log Out',
                     style: TextStyle(
                       color: kPrimaryColor,
                       fontSize: 17,

@@ -1,9 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:gsg_fire_base/Auth/Providers/authProvider.dart';
 import 'package:gsg_fire_base/Auth/Screens/GetStarted/GetStartedScreen.dart';
-import 'package:gsg_fire_base/profileScreen/ProfileScreen.dart';
-
+import 'package:gsg_fire_base/Providers/authProvider.dart';
+import 'AppScreens/EditProfile/EditProfile.dart';
+import 'AppScreens/ProfileScreen/ProfileScreen.dart';
+import 'AppScreens/SplashScreen/splachScreen.dart';
 import 'Auth/Screens/Login/login_screen.dart';
 import 'Auth/Screens/ResetPassword/ResetPassword.dart';
 import 'Auth/Screens/Signup/signup_screen.dart';
@@ -24,6 +25,8 @@ void main() {
             HomeScreen.routeName: (context) => HomeScreen(),
             GetStartedScreen.routeName: (context) => GetStartedScreen(),
             ProfileScreen.routeName: (context) => ProfileScreen(),
+            SplachScreen.routeName: (context) => SplachScreen(),
+            EditProfileScreen.routeName: (context) => EditProfileScreen(),
           },
           navigatorKey: RouteHelper.routeHelper.navKey,
           debugShowCheckedModeBanner: false,
@@ -44,7 +47,7 @@ class FirebaseConfiguration extends StatelessWidget {
             );
           }
           if (snapshotData.connectionState == ConnectionState.done) {
-            return WelcomeScreen();
+            return SplachScreen();
           }
           return Scaffold(
             body: Center(

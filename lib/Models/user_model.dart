@@ -21,4 +21,13 @@ class UserModel {
     this.imageUrl = map['imageUrl'];
     this.bio = map['bio'];
   }
+  toMap() {
+    return {
+      'id': this.id,
+      'email': this.email,
+      'userName': this.userName,
+      'imageUrl': this.imageUrl,
+      'bio': this.bio,
+    };
+  }
 }

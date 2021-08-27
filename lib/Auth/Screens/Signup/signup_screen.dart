@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:gsg_fire_base/Auth/Providers/authProvider.dart';
-import 'package:gsg_fire_base/Auth/Screens/GetStarted/GetStartedScreen.dart';
 import 'package:gsg_fire_base/Auth/Screens/Login/login_screen.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gsg_fire_base/Auth/Screens/Signup/background.dart';
+import 'package:gsg_fire_base/Providers/authProvider.dart';
 import 'package:gsg_fire_base/Services/Router.dart';
 import 'package:gsg_fire_base/constants.dart';
 import 'package:gsg_fire_base/components/rounded_button.dart';

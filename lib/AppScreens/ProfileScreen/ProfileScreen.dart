@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:gsg_fire_base/Auth/Providers/authProvider.dart';
+import 'package:gsg_fire_base/AppScreens/EditProfile/EditProfile.dart';
 import 'package:gsg_fire_base/Auth/Screens/GetStarted/background.dart';
-import 'package:gsg_fire_base/Helpers/auth_helper.dart';
 import 'package:gsg_fire_base/HomeScreen.dart';
+import 'package:gsg_fire_base/Providers/authProvider.dart';
 import 'package:gsg_fire_base/Services/Router.dart';
 import 'package:gsg_fire_base/components/RoundedReadField.dart';
 import 'package:gsg_fire_base/components/bio_input_field.dart';
@@ -11,10 +11,10 @@ import 'package:gsg_fire_base/components/rounded_button.dart';
 import 'package:gsg_fire_base/components/rounded_input_field.dart';
 import 'package:gsg_fire_base/constants.dart';
 import 'package:provider/provider.dart';
-import '../../../constants.dart';
+import '../../constants.dart';
 
 class ProfileScreen extends StatefulWidget {
-  static final routeName = 'ProfileScreen';
+  static final routeName = 'AppScreens.ProfileScreen';
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -46,19 +46,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          "My profile!",
-                          style: TextStyle(
-                            color: kPrimaryColor,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: 50,
+                            ),
+                            Text(
+                              "My profile!",
+                              style: TextStyle(
+                                  color: kPrimaryColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 25),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                Provider.of<AuthProvider>(context,
+                                        listen: false)
+                                    .fillControllers();
+                                RouteHelper.routeHelper
+                                    .goTO(EditProfileScreen.routeName);
+                              },
+                              icon: Icon(
+                                Icons.edit,
+                                color: kPrimaryColor,
+                              ),
+                            ),
+                          ],
                         ),
                         SizedBox(height: size.height * 0.03),
                         CircleAvatar(
                             radius: 90,
                             backgroundColor: Colors.transparent,
-                            backgroundImage:
-                                NetworkImage(provider.userModel.imageUrl)),
+                            backgroundImage: provider.userModel.imageUrl == null
+                                ? AssetImage(
+                                    "assets/images/defaultProfile.png",
+                                  )
+                                : NetworkImage(provider.userModel.imageUrl)),
                         SizedBox(height: size.height * 0.03),
                         RoundedReadField(
                           labelText: provider.userModel.email,

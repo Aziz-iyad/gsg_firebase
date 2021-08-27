@@ -1,27 +1,47 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:gsg_fire_base/Helpers/auth_helper.dart';
-import 'package:gsg_fire_base/Helpers/firesStore_helper.dart';
 import 'package:gsg_fire_base/MyWidgets/MyDrawer.dart';
+import 'package:provider/provider.dart';
+import 'Auth/Helpers/firesStore_helper.dart';
+import 'Providers/authProvider.dart';
 import 'constants.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   static final routeName = 'homeScreen';
 
   @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    Provider.of<AuthProvider>(context, listen: false).getUserFromFireStore();
+    print(FirebaseAuth.instance.currentUser.uid);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: MyDrawer(),
-      appBar: AppBar(
-        backgroundColor: kPrimaryColor,
-        title: Text('Home Screen'),
-      ),
-      body: Center(
-        child: RaisedButton(onPressed: () {
-          FirestoreHelper.firestoreHelper.getAllUsersFromFirestore();
-        }),
-      ),
+    return Consumer<AuthProvider>(
+      builder: (context, provider, x) {
+        return Scaffold(
+          drawer: MyDrawer(
+            imgUrl: provider.userModel.imageUrl,
+            userName: provider.userModel.userName,
+          ),
+          appBar: AppBar(
+            backgroundColor: kPrimaryColor,
+            title: Text('Home Screen'),
+          ),
+          body: Center(
+            child: RaisedButton(onPressed: () {
+              FirestoreHelper.firestoreHelper.getAllUsersFromFirestore();
+            }),
+          ),
+        );
+      },
     );
   }
 }

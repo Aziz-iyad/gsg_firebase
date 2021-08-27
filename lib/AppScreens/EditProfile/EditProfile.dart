@@ -8,17 +8,14 @@ import 'package:gsg_fire_base/constants.dart';
 import 'package:provider/provider.dart';
 import '../../../constants.dart';
 
-class GetStartedScreen extends StatefulWidget {
-  static final routeName = 'GetStarted';
+class EditProfileScreen extends StatefulWidget {
+  static final routeName = 'EditProfile';
 
   @override
-  _GetStartedScreenState createState() => _GetStartedScreenState();
+  _EditProfileScreenState createState() => _EditProfileScreenState();
 }
 
-class _GetStartedScreenState extends State<GetStartedScreen> {
-  bool isVisible = false;
-  bool isVisible2 = true;
-
+class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -32,10 +29,11 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Set up your profile!",
+                    "Edit your profile!",
                     style: TextStyle(
                       color: kPrimaryColor,
                       fontWeight: FontWeight.bold,
+                      fontSize: 20,
                     ),
                   ),
                   SizedBox(height: size.height * 0.03),
@@ -44,24 +42,24 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                       CircleAvatar(
                         radius: 90,
                         backgroundColor: Colors.transparent,
-                        child: ClipOval(
-                          child: provider.file == null
-                              ? Image.asset(
-                                  "assets/images/defaultProfile.png",
-                                  width: size.width * 0.90,
-                                )
-                              : Image.file(
-                                  provider.file,
-                                  fit: BoxFit.fill,
-                                ),
+                        backgroundImage: provider.updatedFile == null
+                            ? NetworkImage(provider.userModel.imageUrl)
+                            : FileImage(provider.updatedFile),
+                        child: Visibility(
+                          visible: provider.userModel.imageUrl == null,
+                          child: CircleAvatar(
+                            radius: 90,
+                            backgroundColor: Colors.transparent,
+                            backgroundImage: AssetImage(
+                              "assets/images/defaultProfile.png",
+                            ),
+                          ),
                         ),
                       ),
-                      Visibility(
-                        visible: isVisible2,
-                        child: Positioned(
-                          top: 130,
-                          left: 110,
-                          child: RawMaterialButton(
+                      Positioned(
+                        top: 130,
+                        left: 110,
+                        child: RawMaterialButton(
                             padding: EdgeInsets.all(10),
                             fillColor: kPrimaryColor,
                             elevation: 10,
@@ -71,43 +69,53 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                               color: Colors.white,
                             ),
                             onPressed: () {
-                              provider.selectFile();
-                              isVisible = true;
-                              isVisible2 = false;
-                            },
-                          ),
-                        ),
-                      ),
-                      Visibility(
-                        visible: isVisible,
-                        child: Positioned(
-                          bottom: 130,
-                          left: 115,
-                          child: RawMaterialButton(
-                            fillColor: Colors.red,
-                            elevation: 5,
-                            shape: CircleBorder(),
-                            child: Icon(
-                              Icons.clear,
-                              color: Colors.white,
-                              size: 15,
-                            ),
-                            onPressed: () {
-                              provider.file = null;
-                              isVisible = false;
-                              isVisible2 = true;
+                              provider.captureUpdateProfileImage();
+
                               setState(() {});
-                            },
-                          ),
-                        ),
-                      )
+                            }),
+                      ),
                     ],
                   ),
                   SizedBox(height: size.height * 0.03),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 50),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "User name:",
+                          style: TextStyle(
+                            color: kPrimaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   RoundedInputField(
                     controller: provider.userNameController,
                     hintText: "User name",
                     icon: Icons.alternate_email,
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 50),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Profile Bio:",
+                          style: TextStyle(
+                            color: kPrimaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   BioInputField(
                     controller: provider.bioController,
@@ -117,7 +125,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                   RoundedButton(
                     text: "Done",
                     press: () {
-                      provider.gdtStarted();
+                      provider.updateProfile();
                     },
                   ),
                 ],

@@ -92,4 +92,12 @@ class AuthHelper {
     );
     firebaseAuth.signOut();
   }
+
+  bool checkUserLogin() {
+    if (firebaseAuth.currentUser == null) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 }
