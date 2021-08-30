@@ -1,12 +1,14 @@
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gsg_fire_base/AppScreens/Chat_Screen.dart';
 import 'package:gsg_fire_base/Auth/Helpers/firesStore_helper.dart';
 import 'package:gsg_fire_base/Auth/Screens/GetStarted/GetStartedScreen.dart';
 import 'package:gsg_fire_base/Auth/Screens/Welcome/welcome_screen.dart';
+import 'package:intl/intl.dart';
 import '../Auth/Helpers/auth_helper.dart';
 import '../Auth/Helpers/firestorage_helper.dart';
-import 'package:gsg_fire_base/HomeScreen.dart';
+import '../AppScreens/HomeScreen.dart';
 import 'package:gsg_fire_base/Models/register_request.dart';
 import 'package:gsg_fire_base/Models/user_model.dart';
 import 'package:gsg_fire_base/Services/Router.dart';
@@ -17,6 +19,7 @@ class AuthProvider extends ChangeNotifier {
   TextEditingController passwordController = TextEditingController();
   TextEditingController userNameController = TextEditingController();
   TextEditingController bioController = TextEditingController();
+  TextEditingController messageController = TextEditingController();
 
   resetController() {
     emailController.clear();
@@ -72,7 +75,7 @@ class AuthProvider extends ChangeNotifier {
     UserCredential userCredential = await AuthHelper.authHelper
         .signIn(emailController.text, passwordController.text);
     FirestoreHelper.firestoreHelper
-        .getUserFromFirestore(userCredential.user.uid);
+        .getUserFromFireStore(userCredential.user.uid);
 
     // bool isVerifiedEmail = AuthHelper.authHelper.checkEmailVerification();
     // if (isVerifiedEmail) {
@@ -95,16 +98,6 @@ class AuthProvider extends ChangeNotifier {
     await AuthHelper.authHelper.logout();
   }
 
-  checkLogin() {
-    bool isLoggedIn = AuthHelper.authHelper.checkUserLogin();
-    print(FirebaseAuth.instance.currentUser);
-    if (isLoggedIn) {
-      RouteHelper.routeHelper.goTOReplacement(HomeScreen.routeName);
-    } else {
-      RouteHelper.routeHelper.goTOReplacement(WelcomeScreen.routeName);
-    }
-  }
-
   File updatedFile;
   captureUpdateProfileImage() async {
     XFile file = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -114,10 +107,25 @@ class AuthProvider extends ChangeNotifier {
 
 ////**CRUD**////
   UserModel userModel;
-  getUserFromFireStore() async {
+  List<UserModel> users;
+  String myId;
+  getAllUsers() async {
+    users = await FirestoreHelper.firestoreHelper.getAllUsersFromFireStore();
+    users.removeWhere((element) => element.id == myId);
+    notifyListeners();
+  }
+
+  getCurrentUserFromFireStore() async {
     String userId = AuthHelper.authHelper.getUserId();
     userModel =
-        await FirestoreHelper.firestoreHelper.getUserFromFirestore(userId);
+        await FirestoreHelper.firestoreHelper.getUserFromFireStore(userId);
+    notifyListeners();
+  }
+
+  getUserFromFireStore(String id) async {
+    String userId = id;
+    userModel =
+        await FirestoreHelper.firestoreHelper.getUserFromFireStore(userId);
     notifyListeners();
   }
 
@@ -147,7 +155,30 @@ class AuthProvider extends ChangeNotifier {
             imageUrl: imageUrl);
 
     await FirestoreHelper.firestoreHelper.updateProfile(myUserModel);
-    getUserFromFireStore();
+    getCurrentUserFromFireStore();
     Navigator.of(RouteHelper.routeHelper.navKey.currentContext).pop();
+  }
+
+  checkLogin() {
+    bool isLoggedIn = AuthHelper.authHelper.checkUserLogin();
+    print(FirebaseAuth.instance.currentUser);
+    if (isLoggedIn) {
+      myId = AuthHelper.authHelper.getUserId();
+      getAllUsers();
+      print(users);
+      RouteHelper.routeHelper.goTOReplacement(HomeScreen.routeName);
+    } else {
+      RouteHelper.routeHelper.goTOReplacement(WelcomeScreen.routeName);
+    }
+  }
+
+  sendToFireStore() async {
+    FirestoreHelper.firestoreHelper.addMessageToFireStore({
+      'message': messageController.text,
+      'dateTime': DateTime.now(),
+      'messageTime': DateFormat.jm().format(new DateTime.now()).toString(),
+      'userName': userModel.userName,
+      'imgUrl': userModel.imageUrl,
+    });
   }
 }

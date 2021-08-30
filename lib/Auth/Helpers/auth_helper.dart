@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gsg_fire_base/Auth/Screens/GetStarted/GetStartedScreen.dart';
-import 'package:gsg_fire_base/HomeScreen.dart';
+import '../../AppScreens/HomeScreen.dart';
 import 'package:gsg_fire_base/Services/Router.dart';
 import 'package:gsg_fire_base/Services/custom_dialoug.dart';
 

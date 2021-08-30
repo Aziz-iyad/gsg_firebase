@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gsg_fire_base/AppScreens/EditProfile/EditProfile.dart';
 import 'package:gsg_fire_base/Auth/Screens/GetStarted/background.dart';
-import 'package:gsg_fire_base/HomeScreen.dart';
+import '../HomeScreen.dart';
 import 'package:gsg_fire_base/Providers/authProvider.dart';
 import 'package:gsg_fire_base/Services/Router.dart';
 import 'package:gsg_fire_base/components/RoundedReadField.dart';
@@ -26,7 +26,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     // TODO: implement initState
-    Provider.of<AuthProvider>(context, listen: false).getUserFromFireStore();
+    Provider.of<AuthProvider>(context, listen: false)
+        .getCurrentUserFromFireStore();
     print(FirebaseAuth.instance.currentUser.uid);
   }
 

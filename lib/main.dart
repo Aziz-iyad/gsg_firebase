@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'AppScreens/AllUsersScreen.dart';
 import 'package:gsg_fire_base/Auth/Screens/GetStarted/GetStartedScreen.dart';
 import 'package:gsg_fire_base/Providers/authProvider.dart';
+import 'AppScreens/Chat_Screen.dart';
 import 'AppScreens/EditProfile/EditProfile.dart';
 import 'AppScreens/ProfileScreen/ProfileScreen.dart';
 import 'AppScreens/SplashScreen/splachScreen.dart';
@@ -9,7 +11,7 @@ import 'Auth/Screens/Login/login_screen.dart';
 import 'Auth/Screens/ResetPassword/ResetPassword.dart';
 import 'Auth/Screens/Signup/signup_screen.dart';
 import 'Auth/Screens/Welcome/welcome_screen.dart';
-import 'HomeScreen.dart';
+import 'AppScreens/HomeScreen.dart';
 import 'package:gsg_fire_base/Services/Router.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +29,8 @@ void main() {
             ProfileScreen.routeName: (context) => ProfileScreen(),
             SplachScreen.routeName: (context) => SplachScreen(),
             EditProfileScreen.routeName: (context) => EditProfileScreen(),
+            AllUsersScreen.routeName: (context) => AllUsersScreen(),
+            ChatScreen.routeName: (context) => ChatScreen(),
           },
           navigatorKey: RouteHelper.routeHelper.navKey,
           debugShowCheckedModeBanner: false,

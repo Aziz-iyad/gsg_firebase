@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../AppScreens/AllUsersScreen.dart';
 import 'package:gsg_fire_base/AppScreens/ProfileScreen/ProfileScreen.dart';
 import 'package:gsg_fire_base/Auth/Screens/Welcome/welcome_screen.dart';
 import 'package:gsg_fire_base/Providers/authProvider.dart';
@@ -79,13 +80,34 @@ class MyDrawer extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () async {
+                    RouteHelper.routeHelper
+                        .goTOReplacement(AllUsersScreen.routeName);
+                  },
+                  child: Text(
+                    'All Users',
+                    style: TextStyle(
+                      color: kPrimaryColor,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                GestureDetector(
+                  onTap: () async {
                     await AuthHelper.authHelper.logout();
                     Provider.of<AuthProvider>(context, listen: false)
                         .resetController();
                     Provider.of<AuthProvider>(context, listen: false).file =
                         null;
-                    RouteHelper.routeHelper
-                        .goTOReplacement(WelcomeScreen.routeName);
+                    RouteHelper.routeHelper.goTO(WelcomeScreen.routeName);
                   },
                   child: Text(
                     'Log Out',
