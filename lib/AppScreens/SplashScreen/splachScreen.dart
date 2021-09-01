@@ -10,7 +10,8 @@ class SplachScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    // AuthHelper.authHelper.logout();
+    Provider.of<AuthProvider>(context, listen: false)
+        .getCurrentUserFromFireStore();
     Future.delayed(Duration(seconds: 2)).then((value) =>
         Provider.of<AuthProvider>(context, listen: false).checkLogin());
     return Scaffold(

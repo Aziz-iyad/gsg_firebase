@@ -3,8 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:gsg_fire_base/constants.dart';
 
 class UserMessageBubble extends StatefulWidget {
-  UserMessageBubble({this.text, this.sender, this.messageTime, this.dateTime});
+  UserMessageBubble(
+      {this.text,
+      this.imgMessage,
+      this.sender,
+      this.messageTime,
+      this.dateTime});
   final text;
+  final imgMessage;
   final sender;
   final messageTime;
   final dateTime;
@@ -33,22 +39,28 @@ class _UserMessageBubbleState extends State<UserMessageBubble> {
                 setState(() {});
               },
               child: Material(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20)),
-                  elevation: 5,
-                  color: kPrimaryColor.withOpacity(0.9),
-                  child: Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: Text(
-                      widget.text,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                      ),
-                    ),
-                  )),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20)),
+                elevation: 5,
+                color: kPrimaryColor.withOpacity(0.9),
+                child: Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: widget.imgMessage == null
+                      ? Text(
+                          widget.text,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                          ),
+                        )
+                      : Image.network(
+                          widget.imgMessage,
+                          fit: BoxFit.fill,
+                        ),
+                ),
+              ),
             ),
           ),
           SizedBox(

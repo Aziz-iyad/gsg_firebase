@@ -3,12 +3,18 @@ import 'package:gsg_fire_base/constants.dart';
 
 class SenderMessageBubble extends StatefulWidget {
   SenderMessageBubble(
-      {this.text, this.sender, this.messageTime, this.imgUrl, this.dateTime});
+      {this.text,
+      this.sender,
+      this.messageTime,
+      this.imgMessage,
+      this.imgUrl,
+      this.dateTime});
   final text;
   final sender;
   final messageTime;
   final dateTime;
   final imgUrl;
+  final imgMessage;
   bool isVis = false;
   @override
   _SenderMessageBubbleState createState() => _SenderMessageBubbleState();
@@ -23,11 +29,15 @@ class _SenderMessageBubbleState extends State<SenderMessageBubble> {
         children: [
           Row(
             children: [
-              CircleAvatar(
-                radius: 25,
-                backgroundColor: Colors.transparent,
-                backgroundImage: NetworkImage(widget.imgUrl),
-              ),
+              widget.imgMessage == null
+                  ? CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Colors.transparent,
+                      backgroundImage: NetworkImage(widget.imgUrl),
+                    )
+                  : SizedBox(
+                      width: 1,
+                    ),
               SizedBox(
                 width: 15,
               ),
@@ -53,14 +63,19 @@ class _SenderMessageBubbleState extends State<SenderMessageBubble> {
                           elevation: 5,
                           color: Colors.white54,
                           child: Padding(
-                            padding: EdgeInsets.all(12.0),
-                            child: Text(
-                              widget.text,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                              ),
-                            ),
+                            padding: EdgeInsets.all(15.0),
+                            child: widget.imgMessage == null
+                                ? Text(
+                                    widget.text,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                    ),
+                                  )
+                                : Image.network(
+                                    widget.imgMessage,
+                                    fit: BoxFit.fill,
+                                  ),
                           )),
                     ),
                   ),

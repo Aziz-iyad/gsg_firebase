@@ -19,13 +19,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
-  void initState() {
-    // TODO: implement initState
-    Provider.of<AuthProvider>(context, listen: false)
-        .getCurrentUserFromFireStore();
-    print(FirebaseAuth.instance.currentUser.uid);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Consumer<AuthProvider>(

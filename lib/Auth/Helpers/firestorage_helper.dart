@@ -6,7 +6,8 @@ class FireStorageHelper {
   static FireStorageHelper fireStorageHelper = FireStorageHelper._();
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
 
-  Future<String> uploadImage(File file) async {
+  Future<String> uploadImage(File file,
+      [String folderName = 'profiles']) async {
     //-android/memory/aziz/gallery/camera/22-09-2020.jpg.
     //1* make a reference for this file in firebase storage
     String filePath = file.path;

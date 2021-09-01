@@ -12,14 +12,9 @@ import 'package:gsg_fire_base/constants.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class ChatScreen extends StatefulWidget {
+class ChatScreen extends StatelessWidget {
   static final routeName = 'ChatScreen';
-
-  @override
-  _ChatScreenState createState() => _ChatScreenState();
-}
-
-class _ChatScreenState extends State<ChatScreen> {
+  ScrollController scrollController = ScrollController();
   String currentId = AuthHelper.authHelper.getUserId();
 
   @override
@@ -29,8 +24,9 @@ class _ChatScreenState extends State<ChatScreen> {
         children: [
           Container(
             width: double.infinity,
-            height: 127,
+            height: 115,
             decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
               boxShadow: [
                 BoxShadow(
                   // color: Color(0xff651CE5).withOpacity(0.3),
@@ -138,13 +134,22 @@ class _ChatScreenState extends State<ChatScreen> {
                             stream: FirestoreHelper.firestoreHelper
                                 .getFireStoreStream(),
                             builder: (context, dataSnapshot) {
+                              Future.delayed(Duration(milliseconds: 100))
+                                  .then((value) {
+                                scrollController.animateTo(
+                                    scrollController.position.maxScrollExtent,
+                                    duration: Duration(milliseconds: 100),
+                                    curve: Curves.easeInOut);
+                              });
                               QuerySnapshot<Map<String, dynamic>>
                                   querySnapshot = dataSnapshot.data;
                               List<Map> messages = querySnapshot.docs
                                   .map((e) => e.data())
                                   .toList();
                               return ListView.builder(
-                                  reverse: true,
+                                  shrinkWrap: true,
+                                  controller: scrollController,
+                                  reverse: false,
                                   itemCount: messages.length,
                                   itemBuilder: (context, index) {
                                     String user = messages[index]['userId'];
@@ -155,6 +160,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                     return currentId == user
                                         ? UserMessageBubble(
                                             text: messages[index]['message'],
+                                            imgMessage: messages[index]
+                                                ['imgMessage'],
                                             sender: messages[index]['userName'],
                                             messageTime: messages[index]
                                                 ['messageTime'],
@@ -163,6 +170,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                           )
                                         : SenderMessageBubble(
                                             text: messages[index]['message'],
+                                            imgMessage: messages[index]
+                                                ['imgMessage'],
                                             sender: messages[index]['userName'],
                                             imgUrl: messages[index]['imgUrl'],
                                             messageTime: messages[index]
@@ -190,15 +199,25 @@ class _ChatScreenState extends State<ChatScreen> {
                           ],
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 25),
+                          padding: const EdgeInsets.only(left: 5),
                           child: Row(
                             children: [
-                              Image.asset(
-                                'assets/icons/add.png',
-                              ),
-                              SizedBox(
-                                width: 11,
-                              ),
+                              IconButton(
+                                  onPressed: () {
+                                    provider.sendImageToChat();
+                                  },
+                                  icon: Icon(
+                                    Icons.attach_file,
+                                    color: Color(0xFF64297B),
+                                  )),
+                              // IconButton(
+                              //     onPressed: () {
+                              //       provider.sendVoiceToChat();
+                              //     },
+                              //     icon: Icon(
+                              //       Icons.keyboard_voice,
+                              //       color: Color(0xFF64297B),
+                              //     )),
                               Image.asset(
                                 'assets/icons/emoji.png',
                                 color: Color(0xFF64297B),
@@ -220,8 +239,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               IconButton(
                                   onPressed: () {
                                     provider.sendToFireStore();
-                                    provider.messageController.clear();
-                                    setState(() {});
+                                    provider.resetController();
                                   },
                                   icon: Icon(
                                     Icons.send,
@@ -240,5 +258,6 @@ class _ChatScreenState extends State<ChatScreen> {
         ],
       ),
     );
+    ;
   }
 }

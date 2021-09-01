@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:audio_recorder/audio_recorder.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gsg_fire_base/AppScreens/Chat_Screen.dart';
@@ -6,6 +7,7 @@ import 'package:gsg_fire_base/Auth/Helpers/firesStore_helper.dart';
 import 'package:gsg_fire_base/Auth/Screens/GetStarted/GetStartedScreen.dart';
 import 'package:gsg_fire_base/Auth/Screens/Welcome/welcome_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import '../Auth/Helpers/auth_helper.dart';
 import '../Auth/Helpers/firestorage_helper.dart';
 import '../AppScreens/HomeScreen.dart';
@@ -26,6 +28,7 @@ class AuthProvider extends ChangeNotifier {
     passwordController.clear();
     userNameController.clear();
     bioController.clear();
+    messageController.clear();
   }
 
   ////////////////////
@@ -179,6 +182,53 @@ class AuthProvider extends ChangeNotifier {
       'messageTime': DateFormat.jm().format(new DateTime.now()).toString(),
       'userName': userModel.userName,
       'imgUrl': userModel.imageUrl,
+      'imgMessage': null,
+    });
+  }
+
+  sendImageToChat([String message]) async {
+    XFile img = await ImagePicker().pickImage(source: ImageSource.gallery);
+    File file = File(img.path);
+    String imageUrl =
+        await FireStorageHelper.fireStorageHelper.uploadImage(file, 'chats');
+    FirestoreHelper.firestoreHelper.addMessageToFireStore({
+      'message': message ?? '',
+      'dateTime': DateTime.now(),
+      'messageTime': DateFormat.jm().format(new DateTime.now()).toString(),
+      'userName': userModel.userName,
+      'imageUrl': userModel.imageUrl,
+      'imgMessage': imageUrl,
+    });
+  }
+
+  sendVoiceToChat([String message]) async {
+    Directory directory = await getApplicationDocumentsDirectory();
+
+    bool hasPermissions = await AudioRecorder.hasPermissions;
+
+// Get the state of the recorder
+    bool isRecording = await AudioRecorder.isRecording;
+
+// Start recording
+    await AudioRecorder.start(
+        path: directory.path + '/aaa',
+        audioOutputFormat: AudioOutputFormat.AAC);
+
+    await Future.delayed(Duration(seconds: 5));
+    Recording recording = await AudioRecorder.stop();
+    print(
+        "Path : ${recording.path},  Format : ${recording.audioOutputFormat},  Duration : ${recording.duration},  Extension : ${recording.extension},");
+
+    File file = File(recording.path);
+    String imageUrl =
+        await FireStorageHelper.fireStorageHelper.uploadImage(file, 'chats');
+    FirestoreHelper.firestoreHelper.addMessageToFireStore({
+      'message': message ?? '',
+      'dateTime': DateTime.now(),
+      'messageTime': DateFormat.jm().format(new DateTime.now()).toString(),
+      'userName': userModel.userName,
+      'imageUrl': userModel.imageUrl,
+      'imgMessage': imageUrl,
     });
   }
 }

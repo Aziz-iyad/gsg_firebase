@@ -73,28 +73,28 @@ class MyDrawer extends StatelessWidget {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                GestureDetector(
-                  onTap: () async {
-                    RouteHelper.routeHelper
-                        .goTOReplacement(AllUsersScreen.routeName);
-                  },
-                  child: Text(
-                    'All Users',
-                    style: TextStyle(
-                      color: kPrimaryColor,
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.start,
+          //     children: [
+          //       GestureDetector(
+          //         onTap: () async {
+          //           RouteHelper.routeHelper
+          //               .goTOReplacement(AllUsersScreen.routeName);
+          //         },
+          //         child: Text(
+          //           'All Users',
+          //           style: TextStyle(
+          //             color: kPrimaryColor,
+          //             fontSize: 17,
+          //             fontWeight: FontWeight.w600,
+          //           ),
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
