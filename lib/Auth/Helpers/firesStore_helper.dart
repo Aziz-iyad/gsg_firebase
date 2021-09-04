@@ -56,4 +56,18 @@ class FirestoreHelper {
         .doc(userModel.id)
         .update(userModel.toMap());
   }
+
+  ///////////////////// Privet Chat //////////////////////
+  Stream<QuerySnapshot<Map<String, dynamic>>> getFireStoreDmStream(String id) {
+    return firebaseFirestore
+        .collection('$id')
+        .orderBy('dateTime', descending: false)
+        .snapshots();
+  }
+
+  addMessageDmToFireStore(String id, Map map) async {
+    firebaseFirestore
+        .collection('$id')
+        .add({...map, 'userId': AuthHelper.authHelper.getUserId()});
+  }
 }

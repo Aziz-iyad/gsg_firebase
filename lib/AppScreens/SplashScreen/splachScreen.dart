@@ -20,13 +20,7 @@ class SplachScreen extends StatelessWidget {
           child: Image.asset(
         "assets/icons/1.jpg",
         width: size.width * 0.50,
-      )
-
-          // SvgPicture.asset(
-          //   "assets/icons/login.svg",
-          //   height: size.height * 0.40,
-          // ),
-          ),
+      )),
     ));
   }
 }

@@ -1,9 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:gsg_fire_base/AppScreens/ChatScreen.dart';
+import 'package:gsg_fire_base/Providers/user_provider.dart';
 import 'AppScreens/AllUsersScreen.dart';
 import 'package:gsg_fire_base/Auth/Screens/GetStarted/GetStartedScreen.dart';
 import 'package:gsg_fire_base/Providers/authProvider.dart';
-import 'AppScreens/Chat_Screen.dart';
+import 'AppScreens/GroupChat_Screen.dart';
 import 'AppScreens/EditProfile/EditProfile.dart';
 import 'AppScreens/ProfileScreen/ProfileScreen.dart';
 import 'AppScreens/SplashScreen/splachScreen.dart';
@@ -16,8 +18,15 @@ import 'package:gsg_fire_base/Services/Router.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider<AuthProvider>(
-      create: (context) => AuthProvider(),
+  runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AuthProvider>(
+          create: (context) => AuthProvider(),
+        ),
+        ChangeNotifierProvider<UserProvider>(
+          create: (context) => UserProvider(),
+        )
+      ],
       child: MaterialApp(
           routes: {
             WelcomeScreen.routeName: (context) => WelcomeScreen(),
@@ -30,6 +39,7 @@ void main() {
             SplachScreen.routeName: (context) => SplachScreen(),
             EditProfileScreen.routeName: (context) => EditProfileScreen(),
             AllUsersScreen.routeName: (context) => AllUsersScreen(),
+            GroupChatScreen.routeName: (_) => GroupChatScreen(),
             ChatScreen.routeName: (context) => ChatScreen(),
           },
           navigatorKey: RouteHelper.routeHelper.navKey,

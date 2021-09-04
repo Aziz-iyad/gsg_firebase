@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:audio_recorder/audio_recorder.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:gsg_fire_base/AppScreens/Chat_Screen.dart';
+import 'package:gsg_fire_base/AppScreens/GroupChat_Screen.dart';
 import 'package:gsg_fire_base/Auth/Helpers/firesStore_helper.dart';
 import 'package:gsg_fire_base/Auth/Screens/GetStarted/GetStartedScreen.dart';
 import 'package:gsg_fire_base/Auth/Screens/Welcome/welcome_screen.dart';
