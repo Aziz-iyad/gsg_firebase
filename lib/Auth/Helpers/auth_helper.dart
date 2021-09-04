@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gsg_fire_base/Auth/Screens/GetStarted/GetStartedScreen.dart';
 import '../../AppScreens/HomeScreen.dart';
@@ -22,11 +23,15 @@ class AuthHelper {
       return userCredential;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        CustomDialog.customDialog
-            .showCustomDialog('The password provided is too weak.');
+        CustomDialog.customDialog.showCustomDialog(
+            message: 'The password provided is too weak.',
+            dialogType: DialogType.ERROR,
+            function: null);
       } else if (e.code == 'email-already-in-use') {
-        CustomDialog.customDialog
-            .showCustomDialog('The account already exists for that email.');
+        CustomDialog.customDialog.showCustomDialog(
+          message: 'The account already exists for that email.',
+          dialogType: DialogType.QUESTION,
+        );
       }
     } catch (e) {
       print(e);
@@ -41,11 +46,15 @@ class AuthHelper {
       return userCredential;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        CustomDialog.customDialog
-            .showCustomDialog('No user found for that email.');
+        CustomDialog.customDialog.showCustomDialog(
+          message: 'No user found for that email.',
+          dialogType: DialogType.ERROR,
+        );
       } else if (e.code == 'wrong-password') {
-        CustomDialog.customDialog
-            .showCustomDialog('Wrong password provided for that user.');
+        CustomDialog.customDialog.showCustomDialog(
+          message: 'Wrong password provided for that user.',
+          dialogType: DialogType.ERROR,
+        );
       }
     }
   }
@@ -67,14 +76,17 @@ class AuthHelper {
   verifyEmail() async {
     await firebaseAuth.currentUser.sendEmailVerification();
     CustomDialog.customDialog.showCustomDialog(
-      'verification email has been sent, please check your email',
+      message: 'verification email has been sent, please check your email',
+      dialogType: DialogType.SUCCES,
     );
   }
 
   resetPassword(String email) async {
     await firebaseAuth.sendPasswordResetEmail(email: email);
     CustomDialog.customDialog.showCustomDialog(
-        'we have sent email for reset password, please check your email');
+      message: 'we have sent email for reset password, please check your email',
+      dialogType: DialogType.SUCCES,
+    );
   }
 
   bool checkEmailVerification() {
@@ -88,7 +100,8 @@ class AuthHelper {
   myVerification() async {
     await firebaseAuth.currentUser.sendEmailVerification();
     CustomDialog.customDialog.showCustomDialog(
-      'verification email has been sent, please check your email',
+      message: 'verification email has been sent, please check your email',
+      dialogType: DialogType.SUCCES,
     );
     firebaseAuth.signOut();
   }

@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           appBar: AppBar(
             backgroundColor: kPrimaryColor,
-            title: Text('Home Screen'),
+            title: Text('Azizko chatapp'),
           ),
           body: Column(
             children: [
