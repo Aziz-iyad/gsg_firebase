@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gsg_fire_base/Auth/Helpers/auth_helper.dart';
 import 'package:gsg_fire_base/Auth/Screens/Login/background.dart';
 import 'package:gsg_fire_base/Auth/Screens/ResetPassword/ResetPassword.dart';
 import 'package:gsg_fire_base/Auth/Screens/Signup/signup_screen.dart';
@@ -69,7 +70,7 @@ class LoginScreen extends StatelessWidget {
                   RoundedButton(
                     text: "LOGIN",
                     press: () {
-                      // AuthHelper.authHelper.getCurrentUser();
+                      AuthHelper.authHelper.getCurrentUser();
                       provider.login();
                     },
                   ),

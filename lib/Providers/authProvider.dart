@@ -56,15 +56,17 @@ class AuthProvider extends ChangeNotifier {
 
   gdtStarted() async {
     try {
-      String imageUrl =
-          await FireStorageHelper.fireStorageHelper.uploadImage(file);
+      String imageUrl;
+      file == null
+          ? imageUrl = "assets/images/defaultProfile.png"
+          : imageUrl =
+              await FireStorageHelper.fireStorageHelper.uploadImage(file);
       RegisterRequest registerRequest = RegisterRequest(
         id: AuthHelper.authHelper.getCurrentUser().uid,
         email: emailController.text,
         userName: userNameController.text,
         bio: bioController.text,
-        imageUrl:
-            imageUrl == null ? "assets/images/defaultProfile.png" : imageUrl,
+        imageUrl: imageUrl,
       );
       await FirestoreHelper.firestoreHelper.addUserToFirestore(registerRequest);
     } on Exception catch (e) {
